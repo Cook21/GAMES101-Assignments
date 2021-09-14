@@ -133,7 +133,7 @@ void rst::rasterizer::rasterize_triangle(const Triangle& t) {
     }
     // iterate through the pixel and find if the current pixel is inside the triangle
     for(int x=(int)xMin;x<(int)xMax;x++){
-        for(int y=(int)yMin;y<(int)yMax;y++){
+        for(int y=(int)yMin;y < (int)yMax;y++){
             if(insideTriangle(x, y, t.v)){
                 // If so, use the following code to get the interpolated z value.
                 auto[alpha, beta, gamma] = computeBarycentric2D(x, y, t.v);
