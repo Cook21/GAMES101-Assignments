@@ -1,0 +1,11 @@
+install opencv-devel  
+install cmake
+install eigen3                               
+install clang
+install clang-tools-extra
+
+使用方法：
+mkdir build
+cd build
+sudo cmake ..
+make
