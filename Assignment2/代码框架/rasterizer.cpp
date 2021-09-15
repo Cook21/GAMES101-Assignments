@@ -92,7 +92,7 @@ void rst::rasterizer::draw(pos_buf_id pos_buffer, ind_buf_id ind_buffer, col_buf
         {
             vert.x() = 0.5*width*(vert.x()+1.0);
             vert.y() = 0.5*height*(vert.y()+1.0);
-            vert.z() = vert.z() * f1 + f2;
+            vert.z() = - vert.z() * f1 + f2;
         }
 
         for (int i = 0; i < 3; ++i)
@@ -134,7 +134,7 @@ void rst::rasterizer::rasterize_triangle(const Triangle& t) {
     // iterate through the pixel and find if the current pixel is inside the triangle
     for(int x=(int)xMin;x<(int)xMax;x++){
         for(int y=(int)yMin;y < (int)yMax;y++){
-            if(insideTriangle(x, y, t.v)){
+            if(insideTriangle(x+0.5, y+0.5, t.v)){
                 // If so, use the following code to get the interpolated z value.
                 auto[alpha, beta, gamma] = computeBarycentric2D(x+.5, y+.5, t.v);
                 float w_reciprocal = 1.0/(alpha / v[0].w() + beta / v[1].w() + gamma / v[2].w());

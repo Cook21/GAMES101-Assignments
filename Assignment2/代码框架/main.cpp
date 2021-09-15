@@ -47,6 +47,8 @@ Eigen::Matrix4f get_projection_matrix(float eye_fov, float aspect_ratio,
 
     Eigen::Matrix4f projection = Eigen::Matrix4f::Identity();
     std::cout << zNear << ' ' << zFar << '\n';
+    zNear=-zNear;
+    zFar=-zFar;
     // Create the projection matrix for the given parameters.
     // Then return it.
     Eigen::Matrix4f translate;
@@ -65,11 +67,12 @@ Eigen::Matrix4f get_projection_matrix(float eye_fov, float aspect_ratio,
 
     projection = translate * projection;
 
-    float height=2*zNear*std::tan(eye_fov/2);
+    float height=-2*zNear*std::tan(eye_fov/2);
     float width = height*aspect_ratio;
+    //change z to positive to prepare for Z-buffer
     translate << 2./width,  0,         0,               0, 
                 0,          2./height, 0,               0, 
-                0,          0,         2./(zFar-zNear), 0, 
+                0,          0,         2./(zNear-zFar), 0, 
                 0,          0,         0,               1;
     projection = translate * projection;
 
