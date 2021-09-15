@@ -9,6 +9,7 @@
 #include "rasterizer.hpp"
 #include <opencv2/opencv.hpp>
 #include <math.h>
+#include <iostream>
 
 
 rst::pos_buf_id rst::rasterizer::load_positions(const std::vector<Eigen::Vector3f> &positions)
@@ -116,7 +117,6 @@ void rst::rasterizer::draw(pos_buf_id pos_buffer, ind_buf_id ind_buffer, col_buf
 //Screen space rasterization
 void rst::rasterizer::rasterize_triangle(const Triangle& t) {
     auto v = t.toVector4();
-    
     // TODO : Find out the bounding box of current triangle.
     float xMin=0,yMin=0,xMax=width,yMax=height;
     for(auto vertex : t.v){
@@ -136,7 +136,7 @@ void rst::rasterizer::rasterize_triangle(const Triangle& t) {
         for(int y=(int)yMin;y < (int)yMax;y++){
             if(insideTriangle(x, y, t.v)){
                 // If so, use the following code to get the interpolated z value.
-                auto[alpha, beta, gamma] = computeBarycentric2D(x, y, t.v);
+                auto[alpha, beta, gamma] = computeBarycentric2D(x+.5, y+.5, t.v);
                 float w_reciprocal = 1.0/(alpha / v[0].w() + beta / v[1].w() + gamma / v[2].w());
                 float z_interpolated = alpha * v[0].z() / v[0].w() + beta * v[1].z() / v[1].w() + gamma * v[2].z() / v[2].w();
                 z_interpolated *= w_reciprocal;

@@ -46,21 +46,21 @@ Eigen::Matrix4f get_projection_matrix(float eye_fov, float aspect_ratio,
     // Students will implement this function
 
     Eigen::Matrix4f projection = Eigen::Matrix4f::Identity();
-
+    std::cout << zNear << ' ' << zFar << '\n';
     // Create the projection matrix for the given parameters.
     // Then return it.
     Eigen::Matrix4f translate;
     //persp->ortho
-    translate << -zNear, 0, 0, 0, 
-                0, -zNear, 0, 0, 
-                0, 0, -zNear-zFar,-zNear*zFar, 
+    translate << zNear, 0, 0, 0, 
+                0, zNear, 0, 0, 
+                0, 0, zNear+zFar,-zNear*zFar, 
                 0, 0, 1, 0;
 
     projection = translate * projection;
 
     translate << 1, 0, 0, 0, 
                 0, 1, 0, 0, 
-                0, 0, 1,-zNear, 
+                0, 0, 1,-(zNear+zFar)/2.0, 
                 0, 0, 0, 1;
 
     projection = translate * projection;
@@ -69,7 +69,7 @@ Eigen::Matrix4f get_projection_matrix(float eye_fov, float aspect_ratio,
     float width = height*aspect_ratio;
     translate << 2./width,  0,         0,               0, 
                 0,          2./height, 0,               0, 
-                0,          0,         2./(zNear-zFar), 0, 
+                0,          0,         2./(zFar-zNear), 0, 
                 0,          0,         0,               1;
     projection = translate * projection;
 
