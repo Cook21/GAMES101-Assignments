@@ -4,6 +4,8 @@ install eigen3
 install clang
 install clang-tools-extra
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
+
 使用方法：
 mkdir build
 cd build
