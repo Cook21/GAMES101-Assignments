@@ -275,14 +275,10 @@ void rst::rasterizer::rasterize_triangle(
     } 
     if (vertex.y() > yMax) {
       yMax = vertex.y();
-    }
-    xMax++;
-    yMax++;
-    //xMin--;
-    //yMin--;
+    }  
   }
-  for (int x = (int)xMin; x < (int)xMax; x++) {
-    for (int y = (int)yMin; y < (int)yMax; y++) {
+  for (int x = (int)xMin; x <= (int)xMax; x++) {
+    for (int y = (int)yMin; y <= (int)yMax; y++) {
       if (insideTriangle(x, y, t.v)) {
         auto [alpha, beta, gamma] = computeBarycentric2D(x, y, t.v);
         //    * v[i].w() is the vertex view space depth value z.
