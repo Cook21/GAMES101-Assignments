@@ -29,6 +29,12 @@ int main() {
   std::cout << "Example of scalar multiply \n";
   std::cout << v * 3.0f << std::endl;
   std::cout << 2.0f * v << std::endl;
+  // vector coefficient-wise multiply
+  std::cout << "Example of coefficient-wise multiply \n";
+  std::cout << v.cwiseProduct(v) << std::endl;
+  std::cout << "Example of cutoff \n";
+  std::cout << v.head<2>() << std::endl;
+
 
   // Example of matrix
   std::cout << "Example of matrix \n";

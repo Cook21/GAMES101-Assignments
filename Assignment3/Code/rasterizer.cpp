@@ -206,6 +206,7 @@ void rst::rasterizer::draw(std::vector<Triangle *> &TriangleList) {
     for (auto &vert : v) {
       vert.x() = 0.5 * width * (vert.x() + 1.0);
       vert.y() = 0.5 * height * (vert.y() + 1.0);
+      //vert.z() = vert.z() * f1 + f2; original code
       vert.z() = - vert.z() * f1 + f2;
     }
 
@@ -281,9 +282,8 @@ void rst::rasterizer::rasterize_triangle(
     for (int y = (int)yMin; y <= (int)yMax; y++) {
       if (insideTriangle(x, y, t.v)) {
         auto [alpha, beta, gamma] = computeBarycentric2D(x, y, t.v);
-        //    * v[i].w() is the vertex view space depth value z.
-        //    * Z is interpolated view!!(second step of MVP) space depth for the
-        //    current pixel
+        //    * v[i].w() is the 4th element of v[i].
+        //    * Z is interpolated view!!(second step of MVP) space depth for the current pixel
         //    * zp is depth between zNear and zFar, used for z-buffer
         float Z = 1.0 / (alpha / t.v[0].w() + beta / t.v[1].w() + gamma / t.v[2].w());
         float depth_interpolated = (alpha * t.v[0].z() / t.v[0].w() + beta * t.v[1].z() / t.v[1].w() +
@@ -291,11 +291,12 @@ void rst::rasterizer::rasterize_triangle(
         auto &prevDepth = depth_buf[get_index(x, y)];
         if (depth_interpolated < prevDepth) {
           prevDepth = depth_interpolated;
-          auto interpolated_color= (alpha/t.v[0].w()*t.color[0]+beta/t.v[1].w()*t.color[1]+gamma/t.v[2].w()*t.color[2])*Z;
-          auto interpolated_normal= (alpha/t.v[0].w()*t.normal[0]+beta/t.v[1].w()*t.normal[1]+gamma/t.v[2].w()*t.normal[2])*Z;
-          auto interpolated_texcoords= (alpha/t.v[0].w()*t.tex_coords[0]+beta/t.v[1].w()*t.tex_coords[1]+gamma/t.v[2].w()*t.tex_coords[2])*Z;
-          auto interpolated_shadingcoords = (alpha/t.v[0].w()*t.v[0]+beta/t.v[1].w()*t.v[1]+gamma/t.v[2].w()*t.v[2])*Z;
+          auto interpolated_color= interpolate(alpha,beta,gamma,t.color[0],t.color[1],t.color[2],1.0f);
+          auto interpolated_normal= interpolate(alpha,beta,gamma,t.normal[0],t.normal[1],t.normal[2],1.0f);
+          auto interpolated_texcoords= interpolate(alpha,beta,gamma,t.tex_coords[0],t.tex_coords[1],t.tex_coords[2],1.0f);
+          auto interpolated_shadingcoords = interpolate(alpha,beta,gamma,view_pos[0],view_pos[1],view_pos[2],1.0f);
           fragment_shader_payload payload(interpolated_color,interpolated_normal.normalized(), interpolated_texcoords, texture ? &*texture : nullptr);
+          payload.view_pos = interpolated_shadingcoords;
           Eigen::Vector2i point{x,y};
           set_pixel(point, fragment_shader(payload));
           //std::cout << x << ' ' << y << std::endl;
