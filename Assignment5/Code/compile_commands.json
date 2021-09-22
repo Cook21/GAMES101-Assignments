@@ -1,0 +1,17 @@
+[
+{
+  "directory": "/mnt/d/code/GAMES101-Assignments/Assignment5/Code/build",
+  "command": "/usr/bin/c++   -Wall -Wextra -pedantic -Wshadow -Wreturn-type -fsanitize=undefined -std=gnu++17 -o CMakeFiles/RayTracing.dir/main.cpp.o -c /mnt/d/code/GAMES101-Assignments/Assignment5/Code/main.cpp",
+  "file": "/mnt/d/code/GAMES101-Assignments/Assignment5/Code/main.cpp"
+},
+{
+  "directory": "/mnt/d/code/GAMES101-Assignments/Assignment5/Code/build",
+  "command": "/usr/bin/c++   -Wall -Wextra -pedantic -Wshadow -Wreturn-type -fsanitize=undefined -std=gnu++17 -o CMakeFiles/RayTracing.dir/Scene.cpp.o -c /mnt/d/code/GAMES101-Assignments/Assignment5/Code/Scene.cpp",
+  "file": "/mnt/d/code/GAMES101-Assignments/Assignment5/Code/Scene.cpp"
+},
+{
+  "directory": "/mnt/d/code/GAMES101-Assignments/Assignment5/Code/build",
+  "command": "/usr/bin/c++   -Wall -Wextra -pedantic -Wshadow -Wreturn-type -fsanitize=undefined -std=gnu++17 -o CMakeFiles/RayTracing.dir/Renderer.cpp.o -c /mnt/d/code/GAMES101-Assignments/Assignment5/Code/Renderer.cpp",
+  "file": "/mnt/d/code/GAMES101-Assignments/Assignment5/Code/Renderer.cpp"
+}
+]

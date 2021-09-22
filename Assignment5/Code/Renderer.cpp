@@ -39,7 +39,7 @@ Vector3f refract(const Vector3f &I, const Vector3f &N, const float &ior)
 
 // [comment]
 // Compute Fresnel equation
-//
+//菲涅尔
 // \param I is the incident view direction
 //
 // \param N is the normal at the intersection point
@@ -223,14 +223,19 @@ void Renderer::Render(const Scene& scene)
         for (int i = 0; i < scene.width; ++i)
         {
             // generate primary ray direction
-            float x;
-            float y;
+            /* LaTex：
+                i^{'} =i-\frac{width}{2}\\
+                x=i^{'} \div \frac{width}{2} \times scale\times aspect =\left(\frac{2i}{width} -1\right) \times scale\times aspect
+            */
+            float x=(2.0*(float)i/(float)scene.width-1.0)*scale*imageAspectRatio;
+            float y=-(2.0*(float)j/(float)scene.height-1.0)*scale;
             // TODO: Find the x and y positions of the current pixel to get the direction
             // vector that passes through it.
             // Also, don't forget to multiply both of them with the variable *scale*, and
             // x (horizontal) variable with the *imageAspectRatio*            
 
             Vector3f dir = Vector3f(x, y, -1); // Don't forget to normalize this direction!
+            dir = normalize(dir);
             framebuffer[m++] = castRay(eye_pos, dir, scene, 0);
         }
         UpdateProgress(j / (float)scene.height);

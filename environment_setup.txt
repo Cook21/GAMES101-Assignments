@@ -3,6 +3,7 @@ install cmake
 install eigen3                               
 install clang
 install clang-tools-extra
+sudo dnf install libubsan1-8.2.1-3.bs1.el7.x86_64.rpm
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 

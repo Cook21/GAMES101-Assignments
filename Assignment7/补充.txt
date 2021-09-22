@@ -1,0 +1,10 @@
+1、如果出现 http://games-cn.org/forums/topic/zuoyeqiguangxianxiangjiaoceshiyichang/ 所描述
+的部分平面相交被判定为 MISS 的问题，请注意判定 Bounding Box 与 Ray 相交时的边界是 t_enter < = t_exit，
+而不是 t_enter < t_exit. 此外，你还需要注意此判断的精度问题。
+
+2、如果出现 http://games-cn.org/forums/topic/zuoyeqixuanrandejieguotaian/ 所描述的渲染结果
+较暗，出现横向黑色条纹的情况，很可能是因为直接光部分由于精度问题，被错误判断为遮挡，请试着通过精
+度调整放宽相交限制。
+
+3、注意本框架中直接光部分 Intersection.emit 是采样得到的光源的 emission （Li），Vector3f.norm()
+ 返回的是向量的长度而非长度平方。
