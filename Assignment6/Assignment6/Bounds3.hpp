@@ -8,6 +8,7 @@
 #include "Vector.hpp"
 #include <limits>
 #include <array>
+#include <algorithm>
 
 class Bounds3
 {
@@ -91,11 +92,29 @@ class Bounds3
 
 
 inline bool Bounds3::IntersectP(const Ray& ray, const Vector3f& invDir,
-                                const std::array<int, 3>& dirIsNeg) const
+                                const std::array<bool, 3>& dirIsPos) const
 {
     // invDir: ray direction(x,y,z), invDir=(1.0/x,1.0/y,1.0/z), use this because Multiply is faster that Division
     // dirIsNeg: ray direction(x,y,z), dirIsNeg=[int(x>0),int(y>0),int(z>0)], use this to simplify your logic
     // TODO test if ray bound intersects
+    Vector3f tMin;
+    Vector3f tMax;
+    for(int i = 0; i<3; i++){
+        if(dirIsPos[i]){
+            tMin[i]=(pMin[i]-ray.origin[i])*invDir[i];
+            tMax[i]=(pMax[i]-ray.origin[i])*invDir[i];
+        }else{
+            tMax[i]=(pMin[i]-ray.origin[i])*invDir[i];
+            tMin[i]=(pMax[i]-ray.origin[i])*invDir[i];
+        }
+    }
+    float tIn=std::max({tMin.x,tMin.y,tMin.z});
+    float tOut=std::min({tMax.x,tMax.y,tMax.z});
+    if(tIn<tOut&&tOut>0){
+        return true;
+    }else{
+        return false;
+    }
     
 }
 
