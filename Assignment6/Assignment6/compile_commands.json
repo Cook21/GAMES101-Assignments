@@ -1,0 +1,27 @@
+[
+{
+  "directory": "/mnt/d/code/GAMES101/Assignment6/Assignment6/build",
+  "command": "/usr/bin/c++   -std=gnu++17 -o CMakeFiles/RayTracing.dir/main.cpp.o -c /mnt/d/code/GAMES101/Assignment6/Assignment6/main.cpp",
+  "file": "/mnt/d/code/GAMES101/Assignment6/Assignment6/main.cpp"
+},
+{
+  "directory": "/mnt/d/code/GAMES101/Assignment6/Assignment6/build",
+  "command": "/usr/bin/c++   -std=gnu++17 -o CMakeFiles/RayTracing.dir/Vector.cpp.o -c /mnt/d/code/GAMES101/Assignment6/Assignment6/Vector.cpp",
+  "file": "/mnt/d/code/GAMES101/Assignment6/Assignment6/Vector.cpp"
+},
+{
+  "directory": "/mnt/d/code/GAMES101/Assignment6/Assignment6/build",
+  "command": "/usr/bin/c++   -std=gnu++17 -o CMakeFiles/RayTracing.dir/Scene.cpp.o -c /mnt/d/code/GAMES101/Assignment6/Assignment6/Scene.cpp",
+  "file": "/mnt/d/code/GAMES101/Assignment6/Assignment6/Scene.cpp"
+},
+{
+  "directory": "/mnt/d/code/GAMES101/Assignment6/Assignment6/build",
+  "command": "/usr/bin/c++   -std=gnu++17 -o CMakeFiles/RayTracing.dir/BVH.cpp.o -c /mnt/d/code/GAMES101/Assignment6/Assignment6/BVH.cpp",
+  "file": "/mnt/d/code/GAMES101/Assignment6/Assignment6/BVH.cpp"
+},
+{
+  "directory": "/mnt/d/code/GAMES101/Assignment6/Assignment6/build",
+  "command": "/usr/bin/c++   -std=gnu++17 -o CMakeFiles/RayTracing.dir/Renderer.cpp.o -c /mnt/d/code/GAMES101/Assignment6/Assignment6/Renderer.cpp",
+  "file": "/mnt/d/code/GAMES101/Assignment6/Assignment6/Renderer.cpp"
+}
+]

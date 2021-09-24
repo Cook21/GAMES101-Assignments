@@ -2,10 +2,9 @@
 // Created by goksu on 2/25/20.
 //
 
-#include <fstream>
-#include "Scene.hpp"
 #include "Renderer.hpp"
-
+#include "Scene.hpp"
+#include <fstream>
 
 inline float deg2rad(const float& deg) { return deg * M_PI / 180.0; }
 
@@ -25,8 +24,7 @@ void Renderer::Render(const Scene& scene)
     for (uint32_t j = 0; j < scene.height; ++j) {
         for (uint32_t i = 0; i < scene.width; ++i) {
             // generate primary ray direction
-            float x = (2 * (i + 0.5) / (float)scene.width - 1) *
-                      imageAspectRatio * scale;
+            float x = (2 * (i + 0.5) / (float)scene.width - 1) * imageAspectRatio * scale;
             float y = (1 - 2 * (j + 0.5) / (float)scene.height) * scale;
             // TODO: Find the x and y positions of the current pixel to get the direction
             //  vector that passes through it.
@@ -34,10 +32,9 @@ void Renderer::Render(const Scene& scene)
             // *scale*, and x (horizontal) variable with the *imageAspectRatio*
 
             // Don't forget to normalize this direction!
-            Vector3f dir = Vector3f(x, y, -1); 
+            Vector3f dir = Vector3f(x, y, -1);
             dir = normalize(dir);
-            framebuffer[m++] = scene.castRay(Ray(eye_pos, dir,0), 0);
-
+            framebuffer[m++] = scene.castRay(Ray(eye_pos, dir, 0), 0);
         }
         UpdateProgress(j / (float)scene.height);
     }
@@ -53,5 +50,5 @@ void Renderer::Render(const Scene& scene)
         color[2] = (unsigned char)(255 * clamp(0, 1, framebuffer[i].z));
         fwrite(color, 1, 3, fp);
     }
-    fclose(fp);    
+    fclose(fp);
 }
