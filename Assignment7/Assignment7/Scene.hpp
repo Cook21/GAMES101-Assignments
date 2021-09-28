@@ -5,6 +5,9 @@
 #pragma once
 
 #include <vector>
+#include <chrono>
+#include <future>
+#include <thread>
 #include "Vector.hpp"
 #include "Object.hpp"
 #include "Light.hpp"
@@ -17,6 +20,7 @@ class Scene
 {
 public:
     // setting up options
+    //original 1280*960
     int width = 1280;
     int height = 960;
     double fov = 40;

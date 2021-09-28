@@ -10,6 +10,9 @@
 inline float deg2rad(const float& deg) { return deg * M_PI / 180.0; }
 
 const float EPSILON = 0.00001;
+Vector3f castRay(const Scene& scene,const Ray& ray,const float& spp){
+    return scene.castRay(ray, 0)/ spp;
+}
 
 // The main render function. This where we iterate over all pixels in the image,
 // generate primary rays and cast these rays into the scene. The content of the
@@ -23,9 +26,10 @@ void Renderer::Render(const Scene& scene)
     Vector3f eye_pos(278, 273, -800);
     int m = 0;
 
-    // change the spp value to change sample ammount
+    // change the spp value to change sample ammount, original:16
     int spp = 16;
     std::cout << "SPP: " << spp << "\n";
+    //std::vector<std::future<Vector3f>> futbuffer(framebuffer.size());
     for (uint32_t j = 0; j < scene.height; ++j) {
         for (uint32_t i = 0; i < scene.width; ++i) {
             // generate primary ray direction
@@ -34,9 +38,16 @@ void Renderer::Render(const Scene& scene)
             float y = (1 - 2 * (j + 0.5) / (float)scene.height) * scale;
 
             Vector3f dir = normalize(Vector3f(-x, y, 1));
+            std::vector<std::future<Vector3f>> futbuffer(spp);
             for (int k = 0; k < spp; k++){
-                framebuffer[m] += scene.castRay(Ray(eye_pos, dir), 0) / spp;  
+                futbuffer[k] = std::async(castRay,std::ref(scene),Ray(eye_pos, dir),spp);
+                //framebuffer[m] += scene.castRay(Ray(eye_pos, dir), 0) / spp;  
             }
+            
+            for (int k = 0; k < spp; k++){
+                framebuffer[m] += futbuffer[k].get();
+            }
+            
             m++;
         }
         UpdateProgress(j / (float)scene.height);

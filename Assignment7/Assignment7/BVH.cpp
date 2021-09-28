@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <cassert>
+#include <vector>
 #include "BVH.hpp"
 
 BVHAccel::BVHAccel(std::vector<Object*> p, int maxPrimsInNode,
@@ -43,8 +44,8 @@ BVHBuildNode* BVHAccel::recursiveBuild(std::vector<Object*> objects)
         return node;
     }
     else if (objects.size() == 2) {
-        node->left = recursiveBuild(std::vector{objects[0]});
-        node->right = recursiveBuild(std::vector{objects[1]});
+        node->left = recursiveBuild(std::vector<Object*>{objects[0]});
+        node->right = recursiveBuild(std::vector<Object*>{objects[1]});
 
         node->bounds = Union(node->left->bounds, node->right->bounds);
         node->area = node->left->area + node->right->area;
@@ -105,10 +106,37 @@ Intersection BVHAccel::Intersect(const Ray& ray) const
     return isect;
 }
 
-Intersection BVHAccel::getIntersection(BVHBuildNode* node, const Ray& ray) const
+Intersection BVHAccel::getIntersection(BVHBuildNode* node,
+    const Ray& ray) const
 {
     // TODO Traverse the BVH to find intersection
-
+    Intersection noIntersection;
+    std::array<bool, 3> isDirPos { ray.direction[0] > 0, ray.direction[1] > 0,
+        ray.direction[2] > 0 };
+    if (node->bounds.IntersectP(ray, ray.direction_inv, isDirPos)) {
+        //std::cout << "bvh intersected\n"; 
+        if (node->left && node->right) {
+            Intersection intersectionLeft = getIntersection(node->left, ray);
+            Intersection intersectionRight = getIntersection(node->right, ray);
+            if (intersectionLeft.happened && intersectionRight.happened) {
+                if (intersectionLeft.distance < intersectionRight.distance) {
+                    return intersectionLeft;
+                } else {
+                    return intersectionRight;
+                }
+            } else if (intersectionLeft.happened) {
+                return intersectionLeft;
+            } else if (intersectionRight.happened) {
+                return intersectionRight;
+            } else {
+                return noIntersection;
+            }
+        } else {
+            return node->object->getIntersection(ray);
+        }
+    } else {
+        return noIntersection;
+    }
 }
 
 
