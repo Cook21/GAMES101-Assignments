@@ -2,16 +2,22 @@
 // Created by goksu on 2/25/20.
 //
 
-#include <fstream>
-#include "Scene.hpp"
 #include "Renderer.hpp"
-
+#include "Scene.hpp"
+#include <cstdint>
+#include <fstream>
 
 inline float deg2rad(const float& deg) { return deg * M_PI / 180.0; }
 
 const float EPSILON = 0.00001;
-Vector3f castRay(const Scene& scene,const Ray& ray,const float& spp){
-    return scene.castRay(ray, 0)/ spp;
+const int taskNum = 60;
+Vector3f castRay(const Scene& scene, const Ray& ray, const float& spp)
+{
+    Vector3f currPixel;
+    for (int k = 0; k < spp; k++) {
+        currPixel += scene.castRay(ray, 0) / spp;
+    }
+    return currPixel;
 }
 
 // The main render function. This where we iterate over all pixels in the image,
@@ -24,34 +30,34 @@ void Renderer::Render(const Scene& scene)
     float scale = tan(deg2rad(scene.fov * 0.5));
     float imageAspectRatio = scene.width / (float)scene.height;
     Vector3f eye_pos(278, 273, -800);
-    int m = 0;
 
     // change the spp value to change sample ammount, original:16
     int spp = 16;
     std::cout << "SPP: " << spp << "\n";
-    //std::vector<std::future<Vector3f>> futbuffer(framebuffer.size());
+    std::vector<std::future<Vector3f>> futbuffer(taskNum);
+    int m = 0;
     for (uint32_t j = 0; j < scene.height; ++j) {
         for (uint32_t i = 0; i < scene.width; ++i) {
             // generate primary ray direction
-            float x = (2 * (i + 0.5) / (float)scene.width - 1) *
-                      imageAspectRatio * scale;
+            float x = (2 * (i + 0.5) / (float)scene.width - 1) * imageAspectRatio * scale;
             float y = (1 - 2 * (j + 0.5) / (float)scene.height) * scale;
-
             Vector3f dir = normalize(Vector3f(-x, y, 1));
-            std::vector<std::future<Vector3f>> futbuffer(spp);
-            for (int k = 0; k < spp; k++){
-                futbuffer[k] = std::async(castRay,std::ref(scene),Ray(eye_pos, dir),spp);
-                //framebuffer[m] += scene.castRay(Ray(eye_pos, dir), 0) / spp;  
-            }
-            
-            for (int k = 0; k < spp; k++){
-                framebuffer[m] += futbuffer[k].get();
-            }
-            
+            futbuffer[m % taskNum] = std::async(std::launch::async, castRay, std::ref(scene), Ray(eye_pos, dir), spp);
             m++;
+            if (m % taskNum == 0) {
+                int base = m - taskNum;
+                for (int i = 0; i < taskNum; i++) {
+                    framebuffer[base + i] = futbuffer[i].get();
+                }
+                UpdateProgress(m / (float)framebuffer.size());
+            }
         }
-        UpdateProgress(j / (float)scene.height);
     }
+    int base = m - m%taskNum;
+    for (int i = 0; i < m%taskNum; i++) {
+        framebuffer[base + i] = futbuffer[i].get();
+    }
+
     UpdateProgress(1.f);
 
     // save framebuffer to file
@@ -64,5 +70,5 @@ void Renderer::Render(const Scene& scene)
         color[2] = (unsigned char)(255 * std::pow(clamp(0, 1, framebuffer[i].z), 0.6f));
         fwrite(color, 1, 3, fp);
     }
-    fclose(fp);    
+    fclose(fp);
 }
