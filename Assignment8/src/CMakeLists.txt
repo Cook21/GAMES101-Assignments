@@ -54,5 +54,7 @@ set(EXECUTABLE_OUTPUT_PATH ..)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 
+# include_directories( "../CGL/include" )
+
 # Install to project root
 install(TARGETS ropesim DESTINATION ${RopeSim_SOURCE_DIR})

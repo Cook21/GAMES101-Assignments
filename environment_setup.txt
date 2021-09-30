@@ -1,10 +1,7 @@
-install opencv-devel  
-install cmake
-install eigen3                               
-install clang
-install clang-tools-extra
+install opencv-devel eigen3                               
+install clang clang-tools-extra cmake
 sudo dnf install libubsan1-8.2.1-3.bs1.el7.x86_64.rpm
-
+install mesa-libGL-devel mesa-libGLU-devel freetype-devel libXrandr-devel libXinerama-devel libXcursor-devel
 set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 
 使用方法：

@@ -10,6 +10,7 @@ option(BUILD_LIBCGL "Build with libCGL" ON)
 # Platform-specific settings
 #-------------------------------------------------------------------------------
 
+
 ###################
 # Building on OSX #
 ###################
@@ -66,7 +67,6 @@ endif(APPLE)
 ##################
 set(LINUX UNIX AND NOT APPLE)
 if(LINUX)
-
   # GCC only
   if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
 
@@ -98,6 +98,7 @@ if(LINUX)
     endif(BUILD_DEBUG)
 
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GCC_CXX_FLAGS}")
+    set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 
   endif()
 

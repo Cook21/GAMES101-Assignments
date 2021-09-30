@@ -6,6 +6,7 @@
 #include "Scene.hpp"
 #include <cstdint>
 #include <fstream>
+#include <future>
 
 inline float deg2rad(const float& deg) { return deg * M_PI / 180.0; }
 
@@ -42,7 +43,7 @@ void Renderer::Render(const Scene& scene)
             float x = (2 * (i + 0.5) / (float)scene.width - 1) * imageAspectRatio * scale;
             float y = (1 - 2 * (j + 0.5) / (float)scene.height) * scale;
             Vector3f dir = normalize(Vector3f(-x, y, 1));
-            futbuffer[m % taskNum] = std::async(std::launch::async, castRay, std::ref(scene), Ray(eye_pos, dir), spp);
+            futbuffer[m % taskNum] = std::async(std::launch::async | std::launch::deferred, castRay, std::ref(scene), Ray(eye_pos, dir), spp);
             m++;
             if (m % taskNum == 0) {
                 int base = m - taskNum;
