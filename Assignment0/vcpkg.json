@@ -1,0 +1,7 @@
+{
+    "name": "transformation",
+    "version-string": "0",
+    "dependencies": [
+      "eigen3"
+    ]
+}
