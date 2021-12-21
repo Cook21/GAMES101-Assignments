@@ -7,6 +7,7 @@ FetchContent_Declare(vcpkg
 FetchContent_MakeAvailable(vcpkg)
 set(CMAKE_TOOLCHAIN_FILE ${vcpkg_SOURCE_DIR}/scripts/buildsystems/vcpkg.cmake
   CACHE STRING "Vcpkg toolchain file")
+include_directories(${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/include)
 project (Transformation)
 set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 add_executable (Transformation main.cpp)
